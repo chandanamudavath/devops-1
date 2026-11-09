@@ -1,23 +1,29 @@
-Pipeline{
+
+pipeline {
     agent any
-    stages('Build'){
-        steps{
-            echo 'Building the application...'
-            bat 'docker build -t myapp:latest .'
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building the application...'
+                bat 'docker build -t myapp:latest .'
+            }
         }
-        stages('Run'){
-            steps{
+
+        stage('Run') {
+            steps {
                 echo 'running the docker'
                 bat 'docker rm -f mycontainer || exit 0'
                 bat 'docker run -d -p 5000:5000 myapp:latest'
             }
         }
     }
-    POST{
-        success{
+
+    post {
+        success {
             echo 'Pipeline completed successfully!'
         }
-        failure{
+        failure {
             echo 'Pipeline failed. Please check the logs for details.'
         }
     }
